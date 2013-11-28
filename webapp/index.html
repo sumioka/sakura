@@ -18,7 +18,7 @@ body {
 	height: 100%
 }
 </style>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?sensor=false">
     </script>
@@ -71,7 +71,7 @@ $(function() {
 		$.get("photos.json", function(data) {
 			console.log("データ：" + data);
 		});
-	}, 60000);
+	}, 10000);
 });
 </script>
 </head>
