@@ -24,8 +24,15 @@ body {
     </script>
 <script type="text/javascript">
 function initialize() {
-	  // 35.456473, 139.634546
-      var myLatlng = new google.maps.LatLng(35.456773, 139.631446);
+      var myLatlng = new google.maps.LatLng(35.560981, 139.718344); // アロマスクエア
+      var images = {
+    		  modified: true,
+    		  images: [
+    		           {lat: 35.560981, lng: 139.718344, img: "photo-600.jpg"}, // アロマスクエア
+    		           {lat: 35.562479, lng: 139.716051, img: "photo-600.jpg"}, // JR蒲田
+    		           {lat: 35.560685, lng: 139.723731, img: "photo-600.jpg"} // 京急蒲田
+    		           ]
+      }
       var mapOptions = {
          center: myLatlng,
          zoom: 17,
@@ -34,13 +41,6 @@ function initialize() {
       var map = new google.maps.Map(document.getElementById("map-canvas"),
            mapOptions);
       var image = 'sakura_L.png';
-      var infowindow = new google.maps.InfoWindow({
-          content: '<img src=\'photo-600.jpg\'/>'
-      });
-      var marker = new google.maps.Marker({
-   		position: myLatlng,
- 		icon: image
-      });
       var styles = [
                     {
                       stylers: [
@@ -49,10 +49,18 @@ function initialize() {
                     }
                     ];
       map.setOptions({styles: styles});
-      google.maps.event.addListener(marker, 'click', function() {
-		infowindow.open(map,marker);
-      });
-      google.maps.event.addListener(map, 'click', function() {
+      // TODO リストの要素が増えたタイミングで増えたものについて実行
+      images.images.forEach(function(element) {
+          var infowindow = new google.maps.InfoWindow({
+              content: '<img src=\'' + element.img + '\'/>'
+          });
+          var marker = new google.maps.Marker({
+       		position: new google.maps.LatLng(element.lat, element.lng),
+     		icon: image
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+    		infowindow.open(map,marker);
+          });
 	    marker.setMap(map);
       });
 }
@@ -63,7 +71,7 @@ $(function() {
 		$.get("photos.json", function(data) {
 			console.log("データ：" + data);
 		});
-	}, 4000);
+	}, 60000);
 });
 </script>
 </head>
