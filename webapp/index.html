@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8" />
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <style type="text/css">
 html {
@@ -17,6 +18,7 @@ body {
 	height: 100%
 }
 </style>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?sensor=false">
     </script>
@@ -55,6 +57,14 @@ function initialize() {
       });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
+$(function() {
+	setInterval(function() {
+		console.log("定期実行");
+		$.get("photos.json", function(data) {
+			console.log("データ：" + data);
+		});
+	}, 4000);
+});
 </script>
 </head>
 <body>
