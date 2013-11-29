@@ -9,7 +9,6 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var fs = require("fs");
-var requestHandler = require("./requestHandler.js");
 
 
 
@@ -17,20 +16,21 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
+//app.use(express.favicon());
+//app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(app.router);
+//app.use(express.methodOverride());
+//app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.bodyParser());
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+//if ('development' == app.get('env')) {
+//  app.use(express.errorHandler());
+//}
 
 //app.get('/', routes.index);
 //app.get('/users', user.list);
@@ -48,11 +48,14 @@ var modified = false;
   * /upload?lat=35.1421&lng=135.3472 みたいなPOSTを想定
   * （可能？）
   */
-app.post('/upload', function(req, res) {
+app.post('/upload_media', function(req, res) {
     //req.files.mediaはアップロードする画像の要素名
-    var media = req.files.media;
+	
+//	console.dir(req);
+	
+    var media = req.files.picture;
 	var now = (+ new Date());
-    fs.rename(media.path, __dirname + "/public/images/" + now + '.png' , function(err) {
+    fs.rename(media.path, __dirname + "/public/images/" + now + '.jpg' , function(err) {
         if (err) {
             res.send(500);
         } else {
@@ -61,7 +64,7 @@ app.post('/upload', function(req, res) {
 
 		data[0].lat = req.query.lat;
 		data[0].lng = req.query.lng;
-		data[0].img = now + ".png";
+		data[0].img = now + ".jpg";
 		modified = true;
 	});
 });
