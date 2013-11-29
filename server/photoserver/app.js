@@ -38,20 +38,67 @@ if ('development' == app.get('env')) {
 //app.get('/photo/upload', requestHandler.upload);
 //app.get('/photo/show', requestHandler.show);
 
+
+var hostname = "10.25.253.116:3000";
+var data = require("./data.json");
+var modified = false;
+
+/**
+  * androidから写真をアップロード
+  * /upload?lat=35.1421&lng=135.3472 みたいなPOSTを想定
+  * （可能？）
+  */
 app.post('/upload', function(req, res) {
     //req.files.mediaはアップロードする画像の要素名
     var media = req.files.media;
-    fs.rename(media.path, __dirname + "/" + 'media.png' , function(err) {
+	var now = (+ new Date());
+    fs.rename(media.path, __dirname + "/public/images/" + now + '.png' , function(err) {
         if (err) {
             res.send(500);
         } else {
             res.send(200);
         }
-    });
+
+		data[0].lat = req.query.lat;
+		data[0].lng = req.query.lng;
+		data[0].img = now + ".png";
+		modified = true;
+	});
 });
 
+	
+app.get("/1/data",function(req,res){
 
+	// ---- 入力
+	var sessionId = req.query.sessionId;
+	var numRecv = req.query.num;
+	
+	// ---- 出力
+	var result = {};
+	
+	// modified
+	result.modified = modified;
+	modified = false;
+	
+	// {lat, lng, img}を num個
+	var numSend = 1;
+	numSend = (numRecv > numSend) ? numRecv : 1;
+	numSend = (numSend > data.length) ? data.length : numSend;
 
+	var subData = []; 
+	for(var i=0; i< numSend; i++){
+		var tmpdata = {};
+		tmpdata.lat = data[i].lat;
+		tmpdata.lng = data[i].lng;
+		tmpdata.img = "http://" + hostname + "/" + data[i].img;
+		subData.push(tmpdata);
+	}
+	result.images = subData;
+	
+
+	res.send(result);
+
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

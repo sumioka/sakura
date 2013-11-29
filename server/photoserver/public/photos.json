@@ -1,0 +1,7 @@
+{
+	"modified": true,
+	"images": [
+		{"lat": 35, "lng": 135, "img": "http://localhost/xxx.jpg"},
+		{"lat": 36, "lng": 135, "img": "http://localhost/yyy.jpg"}
+	]
+}
