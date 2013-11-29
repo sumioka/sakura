@@ -18,7 +18,7 @@ function initialize() {
 					img : "photo-600.jpg"
 				} // 京急蒲田
 		]
-	}
+	};
 	var mapOptions = {
 		center : myLatlng,
 		zoom : 17,
