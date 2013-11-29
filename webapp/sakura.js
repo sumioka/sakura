@@ -43,6 +43,7 @@ function initialize() {
 																	position : new google.maps.LatLng(
 																			element.lat,
 																			element.lng),
+																	map : map,
 																	icon : image
 																});
 														google.maps.event
@@ -55,7 +56,6 @@ function initialize() {
 																							map,
 																							marker);
 																		});
-														marker.setMap(map);
 													}
 												});
 									});
