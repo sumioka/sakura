@@ -14,9 +14,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
+import fj.hackathon.sakura.http.PhotoSend;
 
 public class CheckAccelerometerActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -95,15 +94,6 @@ public class CheckAccelerometerActivity extends Activity {
     protected boolean isPortrait() {
         return (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
     }
-
-
-
-
-
-
-
-
-
 
 
 	@Override
@@ -187,17 +177,21 @@ public class CheckAccelerometerActivity extends Activity {
     private Camera.PictureCallback mPicJpgListener = new Camera.PictureCallback() {
         public void onPictureTaken(byte[] data, Camera camera) {
             // カメラインスタンスを解放
-            if (mCam != null) {
+            /*
+        	if (mCam != null) {
                 mCam.release();
                 mCam = null;
-            }
+            }*/
 
             if (data == null) {
                 return;
             }
 
             Log.d(TAG,"test");
-            /*
+
+
+
+
 
             // データをHTTPでサーバに送る
             PhotoSend photoSend = new PhotoSend();
@@ -210,7 +204,10 @@ public class CheckAccelerometerActivity extends Activity {
                 }
             };
             handler.postDelayed(clearGuardFlag, 2000);
-            */
+
+
+            mCam.startPreview();
+            mIsTake = false;
         }
     };
 
@@ -257,8 +254,10 @@ public class CheckAccelerometerActivity extends Activity {
 				float az = event.values[2];
 
 				double power = Math.pow(ax * ax + ay * ay + az * az,0.5);
-				if(power > 11)
+				if(power > 11){
+					Log.d(TAG,"takephoto()");
 					takePhoto();
+				}
 /*
 				vx.setText("" + event.values[0]);
 				vy.setText("" + event.values[1]);
