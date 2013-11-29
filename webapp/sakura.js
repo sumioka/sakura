@@ -40,12 +40,12 @@ function initialize() {
 	var done = {};
 	$(function() {
 		setInterval(function() {
-			// FIXME 動かない。
-				$.get("photos.json", function(data) {
-					console.log("データ：" + data);
-					// TODO dataをimagesに格納
-					});
-				// TODO データ読み込み完了のタイミングで実行
+			$.get("http://kumano.zetta.flab.fujitsu.co.jp/sakura/photos.json",
+					function(data) {
+						console.log("データ：" + data);
+						// TODO dataをimagesに格納
+				});
+			// TODO データ読み込み完了のタイミングで実行
 				images.images.forEach(function(element) {
 					if (!done[element.lat + "_" + element.lng]) {
 						done[element.lat + "_" + element.lng] = true;
