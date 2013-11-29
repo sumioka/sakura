@@ -35,27 +35,34 @@ function initialize() {
 	map.setOptions( {
 		styles : styles
 	});
-	// TODO リストの要素が増えたタイミングで増えたものについて実行
-	images.images.forEach(function(element) {
-		var infowindow = new google.maps.InfoWindow( {
-			content : '<img src=\'' + element.img + '\'/>'
-		});
-		var marker = new google.maps.Marker( {
-			position : new google.maps.LatLng(element.lat, element.lng),
-			icon : image
-		});
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.open(map, marker);
-		});
-		marker.setMap(map);
+	var done = {};
+	$(function() {
+		setInterval(function() {
+			// FIXME 動かない。
+				$.get("photos.json", function(data) {
+					console.log("データ：" + data);
+					// TODO dataをimagesに格納
+					});
+				// TODO データ読み込み完了のタイミングで実行
+				images.images.forEach(function(element) {
+					if (!done[element.lat + "_" + element.lng]) {
+						done[element.lat + "_" + element.lng] = true;
+						var infowindow = new google.maps.InfoWindow( {
+							content : '<img src=\'' + element.img + '\'/>'
+						});
+						var marker = new google.maps.Marker( {
+							position : new google.maps.LatLng(element.lat,
+									element.lng),
+							icon : image
+						});
+						google.maps.event.addListener(marker, 'click',
+								function() {
+									infowindow.open(map, marker);
+								});
+						marker.setMap(map);
+					}
+				});
+			}, 2000);
 	});
 }
 google.maps.event.addDomListener(window, 'load', initialize);
-$(function() {
-	setInterval(function() {
-		console.log("定期実行");
-		$.get("photos.json", function(data) {
-			console.log("データ：" + data);
-		});
-	}, 10000);
-});
