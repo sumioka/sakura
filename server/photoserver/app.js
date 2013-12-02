@@ -39,7 +39,7 @@ app.use(express.bodyParser());
 //app.get('/photo/show', requestHandler.show);
 
 
-var hostname = "10.25.253.116:3000";
+var hostname = "10.25.244.249:3000";
 var data = require("./data.json");
 var modified = false;
 

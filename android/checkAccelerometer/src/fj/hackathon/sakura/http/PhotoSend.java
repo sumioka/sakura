@@ -19,17 +19,19 @@ import android.util.Log;
 
 public class PhotoSend extends AsyncTask<byte[], Void, Void> {
 
+	private String TAG="PhotoSend";
+
 	@Override
 	protected Void doInBackground(byte[]... params) {
 
 		// 送信先
-		String url = "http://10.25.244.249:3000/upload";
+		String url = "http://10.25.244.249:3000/upload_media";
 		// jpeg画像データ
 		byte[] jpeg = params[0];
 
 
 
-		doPost1(url, jpeg);
+		doPost2(url, jpeg);
 
 
 		return null;
@@ -59,11 +61,13 @@ public class PhotoSend extends AsyncTask<byte[], Void, Void> {
 		ByteArrayBody bab = new ByteArrayBody(jpeg, System.currentTimeMillis() + ".jpg");
 
 		MultipartEntity requestEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+		Log.d(TAG,"post");
+
 	    requestEntity.addPart("picture", bab);
 	    // その他、送信したいデータを追加
 
 	    HttpClient client = new DefaultHttpClient();
-	    HttpPost request = new HttpPost("http://10.25.244.249:3000/upload_media");
+	    HttpPost request = new HttpPost(url);
         try {
     	    request.setEntity(requestEntity);
     	    HttpResponse response = client.execute(request);
