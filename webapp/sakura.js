@@ -11,14 +11,6 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"),
 			mapOptions);
 	var image = 'sakura_L.png';
-	var styles = [ {
-		stylers : [ {
-			saturation : -50
-		} ]
-	} ];
-	map.setOptions( {
-		styles : styles
-	});
 	var done = {};
 	$.ajaxSetup( {
 		cache : false
