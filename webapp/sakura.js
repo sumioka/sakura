@@ -21,45 +21,31 @@ function initialize() {
 	});
 	var done = {};
 	$(function() {
-		setInterval(
-				function() {
-					$
-							.getJSON(
-									"http://kumano.zetta.flab.fujitsu.co.jp/sakura/photos.json",
-									function(data) {
-										images.images = data.images;
-										images.images
-												.forEach(function(element) {
-													if (!done[element.lat + "_"
-															+ element.lng]) {
-														done[element.lat + "_"
-																+ element.lng] = true;
-														var infowindow = new google.maps.InfoWindow(
-																{
-																	content : '<img src=\'' + element.img + '\'/>'
-																});
-														var marker = new google.maps.Marker(
-																{
-																	position : new google.maps.LatLng(
-																			element.lat,
-																			element.lng),
-																	map : map,
-																	icon : image
-																});
-														google.maps.event
-																.addListener(
-																		marker,
-																		'click',
-																		function() {
-																			infowindow
-																					.open(
-																							map,
-																							marker);
-																		});
-													}
-												});
-									});
-				}, 2000);
+		setInterval(function() {
+			console.log("定期実行");
+			$.getJSON("http://10.25.238.90:3000/1/data", function(data) {
+				console.log("データを取得しました。" + JSON.stringify(data));
+				images.images = data.images;
+				images.images.forEach(function(element) {
+					if (!done[element.lat + "_" + element.lng]) {
+						done[element.lat + "_" + element.lng] = true;
+						var infowindow = new google.maps.InfoWindow( {
+							content : '<img src=\'' + element.img + '\'/>'
+						});
+						var marker = new google.maps.Marker( {
+							position : new google.maps.LatLng(element.lat,
+									element.lng),
+							map : map,
+							icon : image
+						});
+						google.maps.event.addListener(marker, 'click',
+								function() {
+									infowindow.open(map, marker);
+								});
+					}
+				});
+			});
+		}, 2000);
 	});
 }
 google.maps.event.addDomListener(window, 'load', initialize);
