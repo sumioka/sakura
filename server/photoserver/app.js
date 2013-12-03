@@ -10,7 +10,7 @@ var http = require('http');
 var path = require('path');
 var fs = require("fs");
 
-
+var im = require("node-imagemagick");
 
 var app = express();
 
@@ -39,9 +39,11 @@ app.use(express.bodyParser());
 //app.get('/photo/show', requestHandler.show);
 
 
-var hostname = "10.25.244.249:3000";
+var hostname = "localhost:3000";
 var data = require("./data.json");
 var modified = false;
+
+var _count = 0;
 
 /**
   * androidから写真をアップロード
@@ -56,16 +58,26 @@ app.post('/upload_media', function(req, res) {
     var media = req.files.picture;
 	var now = (+ new Date());
     fs.rename(media.path, __dirname + "/public/images/" + now + '.jpg' , function(err) {
-        if (err) {
-            res.send(500);
-        } else {
-            res.send(200);
-        }
+	im.resize({		  
+			customArgs:["-auto-orient"],
+			width:640,
+			height: 480,
+			srcPath: now + ".jpg", //media.path ,
+			dstPath: now + 'o.jpg'
+		},
+		function(err){
+	      if (err) {
+	            res.send(500);
+	        } else {
+	            res.send(200);
+		}
+		
 
-		data[0].lat = req.query.lat;
-		data[0].lng = req.query.lng;
+		data[0].lat = req.query.lat ||  35.560981;
+		data[0].lng = req.query.lng || 139.718344;
 		data[0].img = now + ".jpg";
 		modified = true;
+	});
 	});
 });
 
@@ -93,7 +105,7 @@ app.get("/1/data",function(req,res){
 		var tmpdata = {};
 		tmpdata.lat = data[i].lat;
 		tmpdata.lng = data[i].lng;
-		tmpdata.img = "http://" + hostname + "/" + data[i].img;
+		tmpdata.img = "http://" + hostname + "/images/" + data[i].img;
 		subData.push(tmpdata);
 	}
 	result.images = subData;
