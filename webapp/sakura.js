@@ -27,7 +27,8 @@ function initialize() {
 									images.images
 											.forEach(function(element) {
 												if (!done[element.lat + "_"
-														+ element.lng]) {
+														+ element.lng]
+														&& data.modified) {
 													done[element.lat + "_"
 															+ element.lng] = true;
 													var infowindow = new google.maps.InfoWindow(
@@ -42,6 +43,7 @@ function initialize() {
 																map : map,
 																icon : image
 															});
+													console.log("マーカを表示します。");
 													google.maps.event
 															.addListener(
 																	marker,
@@ -52,6 +54,18 @@ function initialize() {
 																						map,
 																						marker);
 																	});
+													$(function() {
+														setTimeout(
+																function() {
+																	console
+																			.log("マーカを消します。");
+																	marker
+																			.setMap(null);
+																	done[element.lat
+																			+ "_"
+																			+ element.lng] = false;
+																}, 10000);
+													});
 												}
 											});
 								});
